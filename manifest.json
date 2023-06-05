@@ -16,5 +16,8 @@
       "matches": ["https://*/*"],
       "js": ["content-script.js"]
     }
-  ]
+  ],
+  "sandbox": {
+    "pages": ["sandbox.html"]
+  }
 }

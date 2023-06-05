@@ -31,7 +31,6 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     console.log("execute script");
     try {
       const code = message.snippet.code;
-      console.log(message.snippet.code);
 
       const script = document.createElement("script");
       script.textContent = code;
