@@ -19,5 +19,11 @@
   ],
   "sandbox": {
     "pages": ["sandbox.html"]
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["highlight.js", "highlight_init.js"],
+      "matches": ["https://*/*"]
+    }
+  ]
 }

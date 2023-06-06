@@ -9,7 +9,7 @@ window.onload = function () {
       e.preventDefault();
       const name = document.getElementById("snippet-name").value;
       const url = document.getElementById("snippet-url").value;
-      const code = document.getElementById("snippet-code").value;
+      const code = document.getElementById("snippet-code").innerText;
       const editIndex = parseInt(document.getElementById("edit-index").value);
       if (Number.isNaN(editIndex)) {
         saveSnippet(name, url, code);
