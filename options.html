@@ -3,7 +3,6 @@
   <head>
     <title>Snippet Manager Options</title>
     <script src="/highlight/highlight.js"></script>
-    <script src="/highlight_init.js"></script>
   </head>
   <body>
     <h1>Snippet Manager Options</h1>
@@ -13,8 +12,7 @@
       <label for="snippet-url">Snippet URL:</label>
       <input type="text" id="snippet-url" required /><br />
       <label for="snippet-code">Snippet Code:</label><br />
-      <pre><code id="snippet-code" class="language-html">down code</code></pre>
-      <br />
+      <textarea id="snippet-code" required></textarea><br />
       <input type="hidden" id="edit-index" />
       <button id="snippet-save" type="submit">Save Snippet</button>
     </form>
