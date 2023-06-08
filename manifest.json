@@ -3,7 +3,7 @@
   "name": "js-injecting-extension",
   "version": "0.1",
   "description": "Execute custom JavaScript code on user-defined URLs",
-  "permissions": ["activeTab", "storage", "webNavigation"],
+  "permissions": ["activeTab", "storage", "webNavigation", "scripting"],
   "action": {
     "default_popup": "popup.html"
   },
@@ -19,11 +19,5 @@
   ],
   "sandbox": {
     "pages": ["sandbox.html"]
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["highlight.js", "highlight_init.js"],
-      "matches": ["https://*/*"]
-    }
-  ]
+  }
 }

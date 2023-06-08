@@ -1,47 +1,33 @@
-function checkSnippetExecution(url) {
+function checkSnippetExecution(url, tabId) {
   chrome.storage.sync.get("snippets", function (result) {
     const snippets = result.snippets || [];
     snippets.forEach(function (snippet) {
       if (snippet.url === url) {
-        // (async () => {
-        //   const [tab] = await chrome.tabs.query({
-        //     active: true,
-        //     lastFocusedWindow: true,
-        //   });
-        // })(
-        //   chrome.scripting.executeScript(
-        //     {
-        //       target: { tabId: tab.id },
-        //       func: `(function executeSnippet() {
-        //       ${snippet.code}
-        //     })();`,
-        //     },
-        //     function () {
-        //       console.log("Executed snippet:", snippet);
-        //     }
-        //   )
-        // );
-
-        // message passing
-        (async () => {
-          const [tab] = await chrome.tabs.query({
-            active: true,
-            lastFocusedWindow: true,
-          });
-          const response = await chrome.tabs.sendMessage(tab.id, {
-            action: "executeSnippet",
-            snippet: snippet,
-          });
-          console.log(response);
-        })();
+        console.log(snippet.code);
+        chrome.scripting
+          .insertCSS({
+            target: { tabId: tabId },
+            css: snippet.code,
+          })
+          .then(() => console.log("CSS injected"));
       }
     });
   });
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (changeInfo.status === "complete") {
+  if (tab.url) {
     const url = tab.url;
-    checkSnippetExecution(url);
+    console.log(url);
+    checkSnippetExecution(url, tabId);
   }
+});
+
+chrome.tabs.onCreated.addListener(function (tab) {
+  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if (tab.url) {
+      const url = tab.url;
+      checkSnippetExecution(url, tabId);
+    }
+  });
 });
