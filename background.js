@@ -1,33 +1,68 @@
-function checkSnippetExecution(url, tabId) {
-  chrome.storage.sync.get("snippets", function (result) {
-    const snippets = result.snippets || [];
-    snippets.forEach(function (snippet) {
-      if (snippet.url === url) {
-        console.log(snippet.code);
-        chrome.scripting
-          .insertCSS({
-            target: { tabId: tabId },
-            css: snippet.code,
-          })
-          .then(() => console.log("CSS injected"));
+const urlList = {
+  naverUrl: "https://www.naver.com/",
+};
+
+function naver() {
+  const observer = new MutationObserver((mutationsList, observer) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+        const widget = document.getElementById("widgetboard");
+        if (widget) {
+          naverSnippet();
+          observer.disconnect();
+        }
       }
-    });
+    }
   });
+
+  const observerOptions = {
+    childList: true,
+    subtree: true,
+  };
+  observer.observe(document.body, observerOptions);
+
+  function naverSnippet() {
+    const rootElement = document.getElementById("root");
+    const firstChild = rootElement.firstElementChild;
+    const footer = document.getElementById("footer");
+    const rightContentAreaFirst =
+      document.getElementById("right-content-area").firstElementChild;
+    const widget = document.getElementById("widgetboard");
+
+    if (rightContentAreaFirst) {
+      const children = rightContentAreaFirst.children;
+      children[1].style.display = "none";
+      children[children.length - 1].style.display = "none";
+    }
+
+    if (firstChild) {
+      firstChild.style.display = "none";
+    }
+
+    if (footer) {
+      footer.style.display = "none";
+    }
+
+    if (widget) {
+      widget.style.display = "none";
+    }
+  }
+}
+
+function checkSnippetExecution(url, tabId) {
+  for (key in urlList) {
+    if (urlList[key] === url) {
+      chrome.scripting.executeScript({
+        target: { tabId: tabId },
+        func: naver,
+      });
+    }
+  }
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (tab.url) {
+  if (changeInfo.status === "complete") {
     const url = tab.url;
-    console.log(url);
     checkSnippetExecution(url, tabId);
   }
-});
-
-chrome.tabs.onCreated.addListener(function (tab) {
-  chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    if (tab.url) {
-      const url = tab.url;
-      checkSnippetExecution(url, tabId);
-    }
-  });
 });
