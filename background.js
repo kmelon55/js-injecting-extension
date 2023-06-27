@@ -31,6 +31,13 @@ function naver() {
     const rightContentArea = document.getElementById("right-content-area");
     const rightContentAreaFirst = rightContentArea.firstElementChild;
     const widget = document.getElementById("widgetboard");
+    const elements = document.getElementsByClassName("ad_area");
+
+    if (elements) {
+      for (let i = 0; i < elements.length; i++) {
+        elements[i].style.display = "none";
+      }
+    }
 
     if (rightContentArea) {
       const children = rightContentAreaFirst.children;
