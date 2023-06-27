@@ -31,8 +31,12 @@ function naver() {
     const rightContentArea = document.getElementById("right-content-area");
     const rightContentAreaFirst = rightContentArea.firstElementChild;
     const widget = document.getElementById("widgetboard");
+    const top = document.getElementById("topSearchWrap");
     const elements = document.getElementsByClassName("ad_area");
 
+    if (top) {
+      top.style.padding = "64px 0 70px";
+    }
     if (elements) {
       for (let i = 0; i < elements.length; i++) {
         elements[i].style.display = "none";
